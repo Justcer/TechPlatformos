@@ -6,19 +6,18 @@
 package lt.vu.entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -43,11 +42,8 @@ public class Anime implements Serializable {
     @Size(max = 50)
     @Column(name = "PAVADINIMAS")
     private String pavadinimas;
-    @JoinTable(name = "ANIMELIST", joinColumns = {
-        @JoinColumn(name = "ANIME_ID", referencedColumnName = "ID")}, inverseJoinColumns = {
-        @JoinColumn(name = "VARTOTOJAS_ID", referencedColumnName = "ID")})
-    @ManyToMany
-    private List<Vartotojas> vartotojasList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "anime")
+    private Collection<Animelist> animelistCollection;
 
     public Anime() {
     }
@@ -72,18 +68,18 @@ public class Anime implements Serializable {
         this.pavadinimas = pavadinimas;
     }
 
-    public List<Vartotojas> getVartotojasList() {
-        return vartotojasList;
+    public Collection<Animelist> getAnimelistCollection() {
+        return animelistCollection;
     }
 
-    public void setVartotojasList(List<Vartotojas> vartotojasList) {
-        this.vartotojasList = vartotojasList;
+    public void setAnimelistCollection(Collection<Animelist> animelistCollection) {
+        this.animelistCollection = animelistCollection;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 11 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 97 * hash + Objects.hashCode(this.pavadinimas);
         return hash;
     }
 
@@ -99,11 +95,13 @@ public class Anime implements Serializable {
             return false;
         }
         final Anime other = (Anime) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.pavadinimas, other.pavadinimas)) {
             return false;
         }
         return true;
     }
+
+    
 
     @Override
     public String toString() {

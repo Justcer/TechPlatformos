@@ -6,17 +6,18 @@
 package lt.vu.entities;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 
@@ -45,8 +46,8 @@ public class Vartotojas implements Serializable {
     @Size(max = 20)
     @Column(name = "PAVARDE")
     private String pavarde;
-    @ManyToMany(mappedBy = "vartotojasList")
-    private List<Anime> animeList;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "vartotojas")
+    private Collection<Animelist> animelistCollection;
 
     public Vartotojas() {
     }
@@ -79,18 +80,19 @@ public class Vartotojas implements Serializable {
         this.pavarde = pavarde;
     }
 
-    public List<Anime> getAnimeList() {
-        return animeList;
+    public Collection<Animelist> getAnimelistCollection() {
+        return animelistCollection;
     }
 
-    public void setAnimeList(List<Anime> animeList) {
-        this.animeList = animeList;
+    public void setAnimelistCollection(Collection<Animelist> animelistCollection) {
+        this.animelistCollection = animelistCollection;
     }
 
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 97 * hash + Objects.hashCode(this.id);
+        hash = 23 * hash + Objects.hashCode(this.vardas);
+        hash = 23 * hash + Objects.hashCode(this.pavarde);
         return hash;
     }
 
@@ -106,13 +108,16 @@ public class Vartotojas implements Serializable {
             return false;
         }
         final Vartotojas other = (Vartotojas) obj;
-        if (!Objects.equals(this.id, other.id)) {
+        if (!Objects.equals(this.vardas, other.vardas)) {
+            return false;
+        }
+        if (!Objects.equals(this.pavarde, other.pavarde)) {
             return false;
         }
         return true;
     }
 
-   
+    
 
     @Override
     public String toString() {
